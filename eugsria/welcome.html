@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Join Chat</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    #joinButton {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #0074d9;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <button id="joinButton">Join Chat</button>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const joinButton = document.getElementById('joinButton');
+      
+      joinButton.addEventListener('click', () => {
+        // Function to get the user's IP address.
+        function getUserIP(callback) {
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', 'https://api64.ipify.org?format=json', true);
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              const response = JSON.parse(xhr.responseText);
+              const userIP = response.ip;
+              callback(userIP);
+            } else {
+              callback(null);
+            }
+          };
+          xhr.send();
+        }
+        
+        // Get the user's IP address and send it to the server via WebSocket.
+        getUserIP((userIP) => {
+          if (userIP) {
+            const socket = new WebSocket('ws://192.168.8.110:3000')            ; // Replace with your server's WebSocket URL.
+            socket.addEventListener('open', () => {
+              socket.send(userIP);
+              socket.close();
+            });
+          } else {
+            console.error('Failed to retrieve user IP address.');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
