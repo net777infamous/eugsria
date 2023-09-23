@@ -48,7 +48,7 @@
         // Get the user's IP address and send it to the server via WebSocket.
         getUserIP((userIP) => {
           if (userIP) {
-            const socket = new WebSocket('ws://192.168.8.110:3000')            ; // Replace with your server's WebSocket URL.
+            const socket = new WebSocket('ws://81.170.227.83:3000')            ; // Replace with your server's WebSocket URL.
             socket.addEventListener('open', () => {
               socket.send(userIP);
               socket.close();
