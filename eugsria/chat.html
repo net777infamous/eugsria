@@ -101,7 +101,7 @@
         const username = urlParams.get('username') || 'Anonymous';
         
         // Establish a WebSocket connection with the server and include the username
-        const socket = new WebSocket(`wss://81.170.227.83:3000?username=${encodeURIComponent(username)}`);
+        const socket = new WebSocket(`wss://192.168.8.110:3000?username=${encodeURIComponent(username)}`);
         
         socket.addEventListener('open', () => {
           console.log('Connected to WebSocket server');
