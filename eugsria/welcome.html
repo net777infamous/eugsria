@@ -1,62 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Join Chat</title>
+  <title>Welcome to the Chat</title>
   <style>
     body {
+      background-color: #1e1e1e;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
     }
+    #joinContainer {
+      text-align: center;
+    }
     #joinButton {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #0074d9;
+      padding: 15px 30px;
+      font-size: 33px;
+      background-color: black;
       color: #fff;
       border: none;
       cursor: pointer;
       border-radius: 5px;
+      margin-top: 10px;
+    }
+    #usernameInput {
+      padding: 10px;
+      font-size: 36px;
+      border: 1px solid #ccc;
+      background-color: black;
+      color: white;
+      border-radius: 5px;
+      margin-right: 10px;
+      width: 500px;
     }
   </style>
 </head>
 <body>
-  <button id="joinButton">Join Chat</button>
+  <div id="joinContainer">
+    <input type="text" id="usernameInput" placeholder="Enter your username">
+    <button id="joinButton">Join Chat</button>
+    <br>
+   <!--<small>Press Enter to Join</small>--> 
+  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const joinButton = document.getElementById('joinButton');
-      
-      joinButton.addEventListener('click', () => {
-        // Function to get the user's IP address.
-        function getUserIP(callback) {
-          const xhr = new XMLHttpRequest();
-          xhr.open('GET', 'https://api64.ipify.org?format=json', true);
-          xhr.onload = function () {
-            if (xhr.status === 200) {
-              const response = JSON.parse(xhr.responseText);
-              const userIP = response.ip;
-              callback(userIP);
-            } else {
-              callback(null);
-            }
-          };
-          xhr.send();
+      const usernameInput = document.getElementById('usernameInput');
+
+      // Function to handle joining the chat
+      function joinChat() {
+        // Check if the username is not empty
+        const username = usernameInput.value.trim();
+        if (username) {
+          // Redirect to chat.html with the username as a query parameter
+          window.location.href = `chat.html?username=${encodeURIComponent(username)}`;
+        } else {
+          alert('Please enter a username.');
         }
-        
-        // Get the user's IP address and send it to the server via WebSocket.
-        getUserIP((userIP) => {
-          if (userIP) {
-            const socket = new WebSocket('ws://81.170.227.83:3000')            ; // Replace with your server's WebSocket URL.
-            socket.addEventListener('open', () => {
-              socket.send(userIP);
-              socket.close();
-            });
-          } else {
-            console.error('Failed to retrieve user IP address.');
-          }
-        });
+      }
+
+      // Bind the joinChat function to the click event of the joinButton
+      joinButton.addEventListener('click', joinChat);
+
+      // Allow pressing Enter key to join the chat
+      usernameInput.addEventListener('keyup', (event) => {
+        if (event.key === 'Enter') {
+          joinChat();
+        }
       });
     });
   </script>
